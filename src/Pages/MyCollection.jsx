@@ -1,0 +1,134 @@
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { ThemeContext } from "../context/ThemeContext.jsx"; // add this
+import { useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loading from "../components/Loading.jsx";
+
+const MyCollection = () => {
+  const { user } = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext); // get theme
+  const navigate = useNavigate();
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user?.email) return;
+
+    fetch(
+      `http://localhost:3000/movies?addedBy=${encodeURIComponent(user.email)}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const userMovies = data.filter((movie) => movie.addedBy === user.email);
+        setMovies(userMovies);
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.error("Failed to fetch your collection!");
+        console.error(err);
+        setLoading(false);
+      });
+  }, [user]);
+
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this movie?"
+    );
+    if (!confirmDelete) return;
+
+    fetch(`http://localhost:3000/movies/${id}`, { method: "DELETE" })
+      .then((res) => res.json())
+      .then(() => {
+        setMovies((prev) => prev.filter((movie) => movie._id !== id));
+        toast.success("Movie deleted successfully!");
+      })
+      .catch((err) => {
+        toast.error("Failed to delete movie!");
+        console.error(err);
+      });
+  };
+
+  if (!user) {
+    return (
+      <div
+        className={`text-center mt-10 ${
+          theme === "dark" ? "text-gray-200" : "text-gray-900"
+        }`}
+      >
+        Please login to see your collection.
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className={`text-center mt-10 text-xl`}>
+        <Loading />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`max-w-5xl mx-auto mt-10`}>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      <h2
+        className={`text-3xl text-center mt-2 font-bold mb-6 ${
+          theme === "dark" ? "text-gray-100" : "text-gray-900"
+        }`}
+      >
+        My Movie Collection
+      </h2>
+
+      {movies.length === 0 ? (
+        <p
+          className={`text-center ${
+            theme === "dark" ? "text-gray-400" : "text-gray-500"
+          }`}
+        >
+          You haven't added any movies yet.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {movies.map((movie) => (
+            <div
+              key={movie._id}
+              className={`p-4 shadow-lg rounded ${
+                theme === "dark"
+                  ? "bg-gray-800 text-gray-100"
+                  : "bg-white text-gray-900"
+              }`}
+            >
+              <img
+                src={movie.posterUrl || "https://via.placeholder.com/400x600"}
+                alt={movie.title}
+                className="w-full h-64 object-cover rounded mb-3"
+              />
+              <h3 className="font-bold text-xl">{movie.title}</h3>
+              <p>Rating: {movie.rating}</p>
+              <p>Genre: {movie.genre}</p>
+
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => navigate(`/movies/update/${movie._id}`)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(movie._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MyCollection;
