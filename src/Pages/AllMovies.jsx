@@ -19,7 +19,7 @@ const AllMovies = () => {
   // Fetch all movies
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:3000/movies")
+    fetch("https://moviemaster-pro-server.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);
@@ -198,9 +198,12 @@ const AllMovies = () => {
                       className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
                       onClick={() => {
                         if (window.confirm("Are you sure to delete?")) {
-                          fetch(`http://localhost:3000/movies/${movie._id}`, {
-                            method: "DELETE",
-                          })
+                          fetch(
+                            `https://moviemaster-pro-server.vercel.app/movies/${movie._id}`,
+                            {
+                              method: "DELETE",
+                            }
+                          )
                             .then(() =>
                               setMovies(
                                 movies.filter((m) => m._id !== movie._id)

@@ -27,7 +27,7 @@ const AddMovie = () => {
       addedBy: user.email, 
     };
 
-    fetch("http://localhost:3000/movies", {
+    fetch("https://moviemaster-pro-server.vercel.app/movies", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newMovie),

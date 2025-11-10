@@ -15,7 +15,7 @@ const MovieDetails = () => {
 
   // Fetch movie details
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`)
+    fetch(`https://moviemaster-pro-server.vercel.app/${id}`)
       .then((res) => res.json())
       .then((data) => setMovie(data))
       .catch(() => toast.error("Failed to fetch movie details!"));
@@ -47,7 +47,8 @@ const MovieDetails = () => {
       addedBy: user.email,
     };
 
-    fetch("http://localhost:3000/movies", {
+    ("https://moviemaster-pro-server.vercel.app/movies",
+    {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newMovie),
@@ -69,7 +70,7 @@ const MovieDetails = () => {
       return;
     }
 
-    fetch(`http://localhost:3000/movies/${movie._id}`, {
+    fetch(`https://moviemaster-pro-server.vercel.app/movies/${movie._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

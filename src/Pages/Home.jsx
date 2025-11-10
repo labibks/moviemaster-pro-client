@@ -5,10 +5,11 @@ import { ThemeContext } from "../context/ThemeContext";
 const Home = () => {
   const [movies, setMovies] = useState([]);
   const { theme } = useContext(ThemeContext);
+  const [selectedGenre, setSelectedGenre] = useState("All");
 
   // Backend থেকে MongoDB data fetch
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://moviemaster-pro-server.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => setMovies(data))
       .catch((err) => console.error(err));
@@ -23,6 +24,7 @@ const Home = () => {
     .slice(0, 6);
 
   const genres = [
+    "All",
     "Action",
     "Drama",
     "Comedy",
@@ -31,6 +33,12 @@ const Home = () => {
     "Sci-Fi",
     "Animation",
   ];
+
+  // ✅ Filter করা movie list
+  const filteredMovies =
+    selectedGenre === "All"
+      ? []
+      : movies.filter((movie) => movie.genre === selectedGenre);
 
   return (
     <div
@@ -51,14 +59,10 @@ const Home = () => {
       >
         <h2 className="text-3xl font-bold text-center mb-6">Statistics</h2>
         <div className="flex justify-center gap-10 flex-wrap">
-          <div
-            className={`bg-black text-white shadow-lg p-6 rounded-lg w-44 text-center hover:scale-105 transition-transform`}
-          >
+          <div className="bg-black text-white shadow-lg p-6 rounded-lg w-44 text-center hover:scale-105 transition-transform">
             Total Movies: {movies.length}
           </div>
-          <div
-            className={`bg-black text-white shadow-lg p-6 rounded-lg w-44 text-center hover:scale-105 transition-transform`}
-          >
+          <div className="bg-black text-white shadow-lg p-6 rounded-lg w-44 text-center hover:scale-105 transition-transform">
             Total Users: 3
           </div>
         </div>
@@ -91,7 +95,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Recently Added Movies */}
+      {/* ✅ Recently Added Movies */}
       <section className="recently-added py-12">
         <h2 className="text-3xl font-bold text-center mb-6">Recently Added</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-5">
@@ -116,23 +120,57 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Genre Section */}
+      {/* ✅ Genre Section (Dynamic filter নিচে show হবে) */}
       <section className="genres py-12">
-        <h2 className="text-3xl font-bold text-center mb-6">Genres</h2>
-        <div className="flex flex-wrap justify-center gap-3">
+        <h2 className="text-3xl font-bold text-center mb-6">Browse by Genre</h2>
+
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {genres.map((genre, idx) => (
-            <span
+            <button
               key={idx}
+              onClick={() => setSelectedGenre(genre)}
               className={`px-4 py-2 rounded-full hover:scale-105 transition-transform ${
-                theme === "dark"
+                selectedGenre === genre
+                  ? "bg-blue-600 text-white"
+                  : theme === "dark"
                   ? "bg-gray-700 text-white hover:bg-gray-600"
                   : "bg-gray-800 text-white hover:bg-gray-900"
               }`}
             >
               {genre}
-            </span>
+            </button>
           ))}
         </div>
+
+        {/* শুধুমাত্র যখন কোনো genre select করা হবে তখন movie দেখাবে */}
+        {selectedGenre !== "All" && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-5">
+            {filteredMovies.length > 0 ? (
+              filteredMovies.map((movie) => (
+                <div
+                  key={movie._id}
+                  className={`movie-card ${
+                    theme === "dark" ? "bg-gray-800" : "bg-white"
+                  } rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform`}
+                >
+                  <img
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="p-3 text-center">
+                    <h4 className="font-semibold">{movie.title}</h4>
+                    <p>{movie.genre}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 col-span-full">
+                No movies found in this genre.
+              </p>
+            )}
+          </div>
+        )}
       </section>
 
       {/* About Platform */}

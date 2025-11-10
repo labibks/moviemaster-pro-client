@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 import { Link } from "react-router";
+import twit from '../assets/Vector.png'
 
 const Footer = () => {
   const { theme } = useContext(ThemeContext);
@@ -48,13 +49,7 @@ const Footer = () => {
           >
             <Facebook size={22} />
           </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            className="hover:text-indigo-500 transition"
-          >
-            <Twitter size={22} />
-          </a>
+          <img src={twit} sizes={22} alt="" />
           <a
             href="https://instagram.com"
             target="_blank"

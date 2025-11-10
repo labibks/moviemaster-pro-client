@@ -17,7 +17,9 @@ const MyCollection = () => {
     if (!user?.email) return;
 
     fetch(
-      `http://localhost:3000/movies?addedBy=${encodeURIComponent(user.email)}`
+      `https://moviemaster-pro-server.vercel.app/movies?addedBy=${encodeURIComponent(
+        user.email
+      )}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -38,7 +40,9 @@ const MyCollection = () => {
     );
     if (!confirmDelete) return;
 
-    fetch(`http://localhost:3000/movies/${id}`, { method: "DELETE" })
+    fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`, {
+      method: "DELETE",
+    })
       .then((res) => res.json())
       .then(() => {
         setMovies((prev) => prev.filter((movie) => movie._id !== id));

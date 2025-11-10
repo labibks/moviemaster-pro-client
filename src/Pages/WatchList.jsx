@@ -16,7 +16,7 @@ const WatchList = () => {
     if (!user?.email) return;
 
     setLoading(true);
-    fetch(`http://localhost:3000/movies`)
+    fetch(`https://moviemaster-pro-server.vercel.app/movies`)
       .then((res) => res.json())
       .then((data) => {
         const watchlistMovies = data.filter(
@@ -35,7 +35,7 @@ const WatchList = () => {
   const handleRemove = (movieId) => {
     if (!window.confirm("Remove this movie from your watchlist?")) return;
 
-    fetch(`http://localhost:3000/movies/${movieId}`, {
+    fetch(`https://moviemaster-pro-server.vercel.app/movies/${movieId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ inWatchlist: false }),

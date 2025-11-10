@@ -7,7 +7,7 @@ const UpdateMovie = ({ loggedInUserEmail }) => {
   const [movieData, setMovieData] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`)
+    fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`)
       .then((res) => res.json())
       .then((data) => setMovieData(data))
       .catch((err) => console.error(err));
@@ -21,7 +21,7 @@ const UpdateMovie = ({ loggedInUserEmail }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:3000/movies/${id}`, {
+    fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(movieData),
