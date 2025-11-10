@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { ThemeContext } from "../context/ThemeContext"; // Theme context import
+import { ThemeContext } from "../context/ThemeContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router";
@@ -9,23 +9,26 @@ import Loading from "../components/Loading";
 const MovieDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
-  const { theme } = useContext(ThemeContext); // theme
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
+  const [loadingMovie, setLoadingMovie] = useState(true);
 
   // Fetch movie details
   useEffect(() => {
-    fetch(`https://moviemaster-pro-server.vercel.app/${id}`)
+    setLoadingMovie(true);
+    fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`)
       .then((res) => res.json())
       .then((data) => setMovie(data))
-      .catch(() => toast.error("Failed to fetch movie details!"));
+      .catch(() => toast.error("Failed to fetch movie details!"))
+      .finally(() => setLoadingMovie(false));
   }, [id]);
 
-  if (!movie)
+  if (loadingMovie || !movie)
     return (
       <div
         className={`flex justify-center items-center h-[60vh] ${
-          theme === "dark" ? "bg-gray-900" : "bg-white"
+          theme === "dark" ? "bg-gray-900" : "bg-gray-100"
         }`}
       >
         <Loading />
@@ -47,8 +50,7 @@ const MovieDetails = () => {
       addedBy: user.email,
     };
 
-    ("https://moviemaster-pro-server.vercel.app/movies",
-    {
+    fetch("https://moviemaster-pro-server.vercel.app/movies", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newMovie),
@@ -92,7 +94,7 @@ const MovieDetails = () => {
 
   return (
     <div
-      className={`max-w-3xl mx-auto mt-10 p-4 rounded ${
+      className={`max-w-3xl mx-auto mt-10 p-6 rounded-lg transition-colors duration-300 ${
         theme === "dark"
           ? "bg-gray-900 text-gray-100"
           : "bg-white text-gray-900"
@@ -111,7 +113,7 @@ const MovieDetails = () => {
       <div className="flex gap-3 flex-wrap">
         <button
           onClick={handleAddToCollection}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded transition ${
             theme === "dark"
               ? "bg-green-700 text-white hover:bg-green-600"
               : "bg-green-500 text-white hover:bg-green-600"
@@ -123,7 +125,7 @@ const MovieDetails = () => {
         {!movie.inWatchlist && (
           <button
             onClick={handleAddToWatchlist}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded transition ${
               theme === "dark"
                 ? "bg-yellow-600 text-white hover:bg-yellow-500"
                 : "bg-yellow-500 text-white hover:bg-yellow-600"
@@ -137,7 +139,7 @@ const MovieDetails = () => {
           <>
             <button
               onClick={() => navigate(`/movies/update/${movie._id}`)}
-              className={`px-4 py-2 rounded ${
+              className={`px-4 py-2 rounded transition ${
                 theme === "dark"
                   ? "bg-blue-700 text-white hover:bg-blue-600"
                   : "bg-blue-500 text-white hover:bg-blue-600"
@@ -149,7 +151,7 @@ const MovieDetails = () => {
               onClick={() =>
                 toast.info("Delete option only available in My Collection")
               }
-              className={`px-4 py-2 rounded ${
+              className={`px-4 py-2 rounded transition ${
                 theme === "dark"
                   ? "bg-red-700 text-white hover:bg-red-600"
                   : "bg-red-500 text-white hover:bg-red-600"
@@ -163,7 +165,7 @@ const MovieDetails = () => {
 
       {movie.plotSummary && (
         <p
-          className={`mt-5 ${
+          className={`mt-5 transition-colors duration-300 ${
             theme === "dark" ? "text-gray-300" : "text-gray-700"
           }`}
         >

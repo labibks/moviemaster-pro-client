@@ -78,11 +78,12 @@ const MyCollection = () => {
     <div className={`max-w-5xl mx-auto mt-10`}>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <h2
-        className={`text-3xl text-center mt-2 font-bold mb-6 ${
+        className={`text-4xl text-center mt-2 font-extrabold mb-8 ${
           theme === "dark" ? "text-gray-100" : "text-gray-900"
         }`}
       >
-        My Movie Collection
+        <span className="text-white">My Movie</span>{" "}
+        <span className="text-orange-600">Collection</span>
       </h2>
 
       {movies.length === 0 ? (

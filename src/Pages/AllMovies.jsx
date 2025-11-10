@@ -81,7 +81,7 @@ const AllMovies = () => {
       }`}
     >
       {/* Theme Toggle Button */}
-      <div className="flex justify-end mb-4">
+      {/* <div className="flex justify-end mb-4">
         <button
           onClick={toggleTheme}
           className={`px-4 py-2 rounded ${
@@ -92,9 +92,11 @@ const AllMovies = () => {
         >
           {theme === "dark" ? "Light Mode" : "Dark Mode"}
         </button>
-      </div>
+      </div> */}
 
-      <h2 className="text-3xl text-center font-bold mb-6">All Movies</h2>
+      <h2 className="text-4xl text-center font-extrabold mb-8">
+        All <span className="text-orange-600">Movies</span>
+      </h2>
 
       {/* Filters */}
       <div
