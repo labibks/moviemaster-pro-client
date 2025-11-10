@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { ThemeContext } from "../context/ThemeContext.jsx"; // add this
+import { ThemeContext } from "../context/ThemeContext.jsx";
 import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../components/Loading.jsx";
+import Swal from "sweetalert2"; // ✅ SweetAlert2 import
 
 const MyCollection = () => {
   const { user } = useContext(AuthContext);
-  const { theme } = useContext(ThemeContext); // get theme
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,24 +35,32 @@ const MyCollection = () => {
       });
   }, [user]);
 
+  // ✅ SweetAlert2 Delete Handler
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this movie?"
-    );
-    if (!confirmDelete) return;
-
-    fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setMovies((prev) => prev.filter((movie) => movie._id !== id));
-        toast.success("Movie deleted successfully!");
-      })
-      .catch((err) => {
-        toast.error("Failed to delete movie!");
-        console.error(err);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't Delete from my collection!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then(() => {
+            setMovies((prev) => prev.filter((movie) => movie._id !== id));
+            Swal.fire("Deleted!", "Your movie has been deleted.", "success");
+          })
+          .catch((err) => {
+            Swal.fire("Error!", "Failed to delete the movie.", "error");
+            console.error(err);
+          });
+      }
+    });
   };
 
   if (!user) {

@@ -2,27 +2,44 @@ import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import { signOut, updateProfile } from "firebase/auth";
-import { auth } from "../firebase/firebase.config"; // 🔥 তোমার Firebase config import করো
+import { auth } from "../firebase/firebase.config";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2"; // ✅ SweetAlert2 import
 
 const Profile = () => {
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // ✅ Logout Handler
+  // ✅ Logout Handler with SweetAlert2
   const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        alert("You have been logged out successfully!");
-        navigate("/login"); // লগইন পেজে পাঠানো
-      })
-      .catch((error) => {
-        console.error("Logout Error:", error.message);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, logout!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        signOut(auth)
+          .then(() => {
+            Swal.fire(
+              "Logged out!",
+              "You have been logged out successfully.",
+              "success"
+            );
+            navigate("/login");
+          })
+          .catch((error) => {
+            Swal.fire("Error!", error.message, "error");
+          });
+      }
+    });
   };
 
-  // ✅ Edit Profile Handler (Demo)
+  // ✅ Edit Profile Handler
   const handleEditProfile = () => {
     const newName = prompt("Enter your new display name:", user.displayName);
     if (newName && newName.trim() !== "") {
@@ -30,11 +47,11 @@ const Profile = () => {
         displayName: newName,
       })
         .then(() => {
-          alert("Profile updated successfully!");
-          window.location.reload(); // refresh to see changes
+          Swal.fire("Success!", "Profile updated successfully!", "success");
+          window.location.reload();
         })
         .catch((error) => {
-          console.error("Profile update failed:", error.message);
+          Swal.fire("Error!", error.message, "error");
         });
     }
   };

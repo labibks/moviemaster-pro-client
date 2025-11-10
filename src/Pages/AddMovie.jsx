@@ -1,4 +1,3 @@
-// AddMovie.jsx
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,6 +9,7 @@ const AddMovie = () => {
   const [genre, setGenre] = useState("");
   const [rating, setRating] = useState("");
   const [posterUrl, setPosterUrl] = useState("");
+  const [releaseYear, setReleaseYear] = useState(""); // ✅ Release Year added
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,7 +24,8 @@ const AddMovie = () => {
       genre,
       rating,
       posterUrl,
-      addedBy: user.email, 
+      releaseYear, // ✅ include Release Year
+      addedBy: user.email,
     };
 
     fetch("https://moviemaster-pro-server.vercel.app/movies", {
@@ -39,6 +40,7 @@ const AddMovie = () => {
         setGenre("");
         setRating("");
         setPosterUrl("");
+        setReleaseYear(""); // reset Release Year
       })
       .catch(() => toast.error("Failed to add movie!"));
   };
@@ -70,6 +72,14 @@ const AddMovie = () => {
           className="border p-2 rounded"
           value={rating}
           onChange={(e) => setRating(e.target.value)}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Release Year" // ✅ Release Year field
+          className="border p-2 rounded"
+          value={releaseYear}
+          onChange={(e) => setReleaseYear(e.target.value)}
           required
         />
         <input
