@@ -1,22 +1,21 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
-import { ThemeContext } from "../context/ThemeContext"; // Theme context import
+import { ThemeContext } from "../context/ThemeContext";
 import Loading from "../components/Loading";
 
 const AllMovies = () => {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [genres, setGenres] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState("All");
   const [ratingRange, setRatingRange] = useState({ min: 0, max: 10 });
   const [loading, setLoading] = useState(true);
 
   const { users } = useContext(AuthContext);
-  const { theme, toggleTheme } = useContext(ThemeContext); // use theme
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  // Fetch all movies
   useEffect(() => {
     setLoading(true);
     fetch("https://moviemaster-pro-server.vercel.app/movies")
@@ -25,8 +24,7 @@ const AllMovies = () => {
         setMovies(data);
         setFilteredMovies(data);
 
-        // Unique genres
-        const allGenres = [...new Set(data.map((m) => m.genre))];
+        const allGenres = ["All", ...new Set(data.map((m) => m.genre))];
         setGenres(allGenres);
 
         setLoading(false);
@@ -41,28 +39,17 @@ const AllMovies = () => {
   useEffect(() => {
     let filtered = [...movies];
 
-    // Single-select genre
-    if (selectedGenres.length > 0) {
-      filtered = filtered.filter((movie) =>
-        selectedGenres.includes(movie.genre)
-      );
+    if (selectedGenre !== "All") {
+      filtered = filtered.filter((movie) => movie.genre === selectedGenre);
     }
 
-    // Rating filter
     filtered = filtered.filter(
       (movie) =>
         movie.rating >= ratingRange.min && movie.rating <= ratingRange.max
     );
 
     setFilteredMovies(filtered);
-  }, [selectedGenres, ratingRange, movies]);
-
-  // Single-select genre handler
-  const handleGenreChange = (genre) => {
-    setSelectedGenres(
-      (prev) => (prev.includes(genre) ? [] : [genre]) // Clear previous selection
-    );
-  };
+  }, [selectedGenre, ratingRange, movies]);
 
   if (loading) {
     return (
@@ -80,49 +67,35 @@ const AllMovies = () => {
           : "bg-white text-gray-900"
       }`}
     >
-      {/* Theme Toggle Button */}
-      {/* <div className="flex justify-end mb-4">
-        <button
-          onClick={toggleTheme}
-          className={`px-4 py-2 rounded ${
-            theme === "dark"
-              ? "bg-gray-700 text-white hover:bg-gray-600"
-              : "bg-gray-200 text-gray-900 hover:bg-gray-300"
-          }`}
-        >
-          {theme === "dark" ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div> */}
-
       <h2 className="text-4xl text-center font-extrabold mb-8">
         All <span className="text-orange-600">Movies</span>
       </h2>
 
-      {/* Filters */}
+      {/* Genre Buttons */}
+      <div className="flex flex-wrap justify-center gap-3 mb-6">
+        {genres.map((genre, idx) => (
+          <button
+            key={idx}
+            onClick={() => setSelectedGenre(genre)}
+            className={`px-4 py-2 rounded-full hover:scale-105 transition-transform ${
+              selectedGenre === genre
+                ? "bg-blue-600 text-white"
+                : theme === "dark"
+                ? "bg-gray-700 text-white hover:bg-gray-600"
+                : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+            }`}
+          >
+            {genre}
+          </button>
+        ))}
+      </div>
+
+      {/* Rating Filter */}
       <div
         className={`mb-6 p-4 rounded shadow-md ${
           theme === "dark" ? "bg-gray-800" : "bg-gray-100"
         }`}
       >
-        <h3 className="font-semibold mb-2">Filter by Genre:</h3>
-        <div className="flex flex-wrap gap-3 mb-4">
-          {genres.map((genre) => (
-            <label
-              key={genre}
-              className="flex items-center gap-2 cursor-pointer select-none"
-            >
-              <input
-                type="checkbox"
-                value={genre}
-                checked={selectedGenres.includes(genre)}
-                onChange={() => handleGenreChange(genre)}
-                className="w-4 h-4 accent-blue-500"
-              />
-              <span>{genre}</span>
-            </label>
-          ))}
-        </div>
-
         <h3 className="font-semibold mb-2">Filter by Rating:</h3>
         <div className="flex items-center gap-2">
           <input
@@ -202,9 +175,7 @@ const AllMovies = () => {
                         if (window.confirm("Are you sure to delete?")) {
                           fetch(
                             `https://moviemaster-pro-server.vercel.app/movies/${movie._id}`,
-                            {
-                              method: "DELETE",
-                            }
+                            { method: "DELETE" }
                           )
                             .then(() =>
                               setMovies(
