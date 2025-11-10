@@ -18,7 +18,8 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto text-center space-y-6">
         {/* Website Name */}
         <h2 className="text-2xl font-bold text-indigo-500">
-          🎬 MovieMaster Pro
+          🎬 <span className="text-orange-600">Movie</span>Master{" "}
+          <span className="text-orange-600">Pro</span>
         </h2>
 
         {/* Navigation Links */}

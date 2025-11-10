@@ -15,6 +15,7 @@ import Login from "./Pages/Login.jsx";
 import Register from "./Pages/Register.jsx";
 import WatchList from './Pages/WatchList.jsx'
 import Profile from "./Pages/Profile.jsx";
+import ForgotPassword from './Pages/ForgotPassword .jsx'
 
 // dummy logged-in user (email or null)
 const user = { email: "user@example.com" }; // logged-in
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path:'/profile',
         Component: Profile
+      },
+      {
+        path: '/forgot',
+        Component: ForgotPassword
       }
     ],
   },

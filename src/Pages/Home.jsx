@@ -57,7 +57,7 @@ const Home = () => {
           theme === "dark" ? "bg-gray-800" : "bg-gray-100"
         }`}
       >
-        <h2 className="text-3xl font-bold text-center mb-6">Statistics</h2>
+        <h2 className="text-4xl font-extrabold text-center mb-6">Statistics</h2>
         <div className="flex justify-center gap-10 flex-wrap">
           <div className="bg-black text-white shadow-lg p-6 rounded-lg w-44 text-center hover:scale-105 transition-transform">
             Total Movies: {movies.length}
@@ -70,8 +70,9 @@ const Home = () => {
 
       {/* Top Rated Movies */}
       <section className="top-rated py-12">
-        <h2 className="text-3xl font-bold text-center mb-6">
-          Top Rated Movies
+        <h2 className="text-4xl font-extrabold text-center mb-6">
+          <span className="text-orange-600">Top</span> Rated{" "}
+          <span className="text-orange-600">Movies</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-5">
           {topRatedMovies.map((movie) => (
@@ -97,7 +98,9 @@ const Home = () => {
 
       {/* ✅ Recently Added Movies */}
       <section className="recently-added py-12">
-        <h2 className="text-3xl font-bold text-center mb-6">Recently Added</h2>
+        <h2 className="text-4xl font-extrabold text-center mb-6">
+          Re<span className="text-orange-600">cen</span>tly Added
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-5">
           {recentlyAddedMovies.map((movie) => (
             <div
@@ -122,7 +125,9 @@ const Home = () => {
 
       {/* ✅ Genre Section (Dynamic filter নিচে show হবে) */}
       <section className="genres py-12">
-        <h2 className="text-3xl font-bold text-center mb-6">Browse by Genre</h2>
+        <h2 className="text-4xl font-extrabold text-center mb-6">
+          Browse <span className="text-orange-600">by</span> Genre
+        </h2>
 
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {genres.map((genre, idx) => (
@@ -179,8 +184,8 @@ const Home = () => {
           theme === "dark" ? "bg-gray-800" : "bg-gray-100"
         }`}
       >
-        <h2 className="text-3xl font-bold text-center mb-4">
-          About MovieMaster Pro
+        <h2 className="text-4xl font-extrabold text-center mb-4">
+          About <span className="text-orange-600">MovieMaster</span> Pro
         </h2>
         <p
           className={theme === "dark" ? "text-gray-200" : "text-gray-700"}
