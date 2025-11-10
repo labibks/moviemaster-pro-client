@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
-import { ThemeContext } from "../context/ThemeContext";
+import { ThemeContext } from "../context/ThemeContext"; // Theme context import
 import Loading from "../components/Loading";
 
 const AllMovies = () => {
@@ -16,6 +16,7 @@ const AllMovies = () => {
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
+  // Fetch all movies
   useEffect(() => {
     setLoading(true);
     fetch("https://moviemaster-pro-server.vercel.app/movies")
@@ -24,7 +25,13 @@ const AllMovies = () => {
         setMovies(data);
         setFilteredMovies(data);
 
-        const allGenres = ["All", ...new Set(data.map((m) => m.genre))];
+        // Unique genres cleaned
+        const allGenres = [
+          "All",
+          ...[...new Set(data.map((m) => m.genre.trim().toLowerCase()))].map(
+            (g) => g.charAt(0).toUpperCase() + g.slice(1)
+          ),
+        ];
         setGenres(allGenres);
 
         setLoading(false);
@@ -40,7 +47,10 @@ const AllMovies = () => {
     let filtered = [...movies];
 
     if (selectedGenre !== "All") {
-      filtered = filtered.filter((movie) => movie.genre === selectedGenre);
+      filtered = filtered.filter(
+        (movie) =>
+          movie.genre.trim().toLowerCase() === selectedGenre.toLowerCase()
+      );
     }
 
     filtered = filtered.filter(
@@ -71,7 +81,7 @@ const AllMovies = () => {
         All <span className="text-orange-600">Movies</span>
       </h2>
 
-      {/* Genre Buttons */}
+      {/* Genre Filter Buttons */}
       <div className="flex flex-wrap justify-center gap-3 mb-6">
         {genres.map((genre, idx) => (
           <button
@@ -82,50 +92,12 @@ const AllMovies = () => {
                 ? "bg-blue-600 text-white"
                 : theme === "dark"
                 ? "bg-gray-700 text-white hover:bg-gray-600"
-                : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+                : "bg-gray-800 text-white hover:bg-gray-900"
             }`}
           >
             {genre}
           </button>
         ))}
-      </div>
-
-      {/* Rating Filter */}
-      <div
-        className={`mb-6 p-4 rounded shadow-md ${
-          theme === "dark" ? "bg-gray-800" : "bg-gray-100"
-        }`}
-      >
-        <h3 className="font-semibold mb-2">Filter by Rating:</h3>
-        <div className="flex items-center gap-2">
-          <input
-            type="number"
-            value={ratingRange.min}
-            min={0}
-            max={ratingRange.max}
-            onChange={(e) =>
-              setRatingRange((prev) => ({
-                ...prev,
-                min: Number(e.target.value),
-              }))
-            }
-            className="w-16 border rounded p-1"
-          />
-          <span>to</span>
-          <input
-            type="number"
-            value={ratingRange.max}
-            min={ratingRange.min}
-            max={10}
-            onChange={(e) =>
-              setRatingRange((prev) => ({
-                ...prev,
-                max: Number(e.target.value),
-              }))
-            }
-            className="w-16 border rounded p-1"
-          />
-        </div>
       </div>
 
       {/* Movies Grid */}
@@ -175,7 +147,9 @@ const AllMovies = () => {
                         if (window.confirm("Are you sure to delete?")) {
                           fetch(
                             `https://moviemaster-pro-server.vercel.app/movies/${movie._id}`,
-                            { method: "DELETE" }
+                            {
+                              method: "DELETE",
+                            }
                           )
                             .then(() =>
                               setMovies(
