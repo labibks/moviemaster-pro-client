@@ -1,6 +1,8 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ForgotPassword = () => {
   const { resetPassword } = useContext(AuthContext);
@@ -10,8 +12,8 @@ const ForgotPassword = () => {
   const handleReset = (e) => {
     e.preventDefault();
     resetPassword(email)
-      .then(() => alert("Password reset email sent! ✅"))
-      .catch((err) => alert(err.message));
+      .then(() => toast.success("Password reset email sent! "))
+      .catch((err) => toast.error(err.message));
   };
 
   return (
@@ -22,6 +24,7 @@ const ForgotPassword = () => {
           : "bg-gray-100 text-gray-900"
       }`}
     >
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <div
         className={`max-w-md w-full p-6 rounded-lg shadow-lg transition-colors duration-300 ${
           theme === "dark" ? "bg-gray-800" : "bg-white"

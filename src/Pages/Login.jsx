@@ -56,7 +56,7 @@ const Login = () => {
           theme === "dark" ? "bg-gray-800" : "bg-white"
         }`}
       >
-        <h2 className="text-3xl font-bold text-center mb-6">Welcome Back 👋</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-blue-500">Welcome Back 👋</h2>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <input
