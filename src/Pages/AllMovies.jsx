@@ -9,7 +9,7 @@ const AllMovies = () => {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("All");
-  const [ratingRange, setRatingRange] = useState({ min: 0, max: 10 });
+  const [ratingRange, setRatingRange] = useState({ min: 0, max: 10 }); // rating filter state
   const [loading, setLoading] = useState(true);
 
   const { users } = useContext(AuthContext);
@@ -23,6 +23,8 @@ const AllMovies = () => {
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);
+
+        // Initial filtered list
         setFilteredMovies(data);
 
         // Unique genres cleaned
@@ -46,6 +48,7 @@ const AllMovies = () => {
   useEffect(() => {
     let filtered = [...movies];
 
+    // Genre filter
     if (selectedGenre !== "All") {
       filtered = filtered.filter(
         (movie) =>
@@ -53,9 +56,11 @@ const AllMovies = () => {
       );
     }
 
+    // Rating filter
     filtered = filtered.filter(
       (movie) =>
-        movie.rating >= ratingRange.min && movie.rating <= ratingRange.max
+        Number(movie.rating) >= ratingRange.min &&
+        Number(movie.rating) <= ratingRange.max
     );
 
     setFilteredMovies(filtered);
@@ -98,6 +103,37 @@ const AllMovies = () => {
             {genre}
           </button>
         ))}
+      </div>
+
+      {/* Rating Filter */}
+      <div className="flex justify-center gap-2 mb-6">
+        <input
+          type="number"
+          value={ratingRange.min}
+          min={0}
+          max={ratingRange.max}
+          onChange={(e) =>
+            setRatingRange((prev) => ({
+              ...prev,
+              min: Number(e.target.value),
+            }))
+          }
+          className="w-16 border rounded p-1"
+        />
+        <span className="text-center">to</span>
+        <input
+          type="number"
+          value={ratingRange.max}
+          min={ratingRange.min}
+          max={10}
+          onChange={(e) =>
+            setRatingRange((prev) => ({
+              ...prev,
+              max: Number(e.target.value),
+            }))
+          }
+          className="w-16 border rounded p-1"
+        />
       </div>
 
       {/* Movies Grid */}

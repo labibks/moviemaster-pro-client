@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../components/Loading.jsx";
-import Swal from "sweetalert2"; // ✅ SweetAlert2 import
+import Swal from "sweetalert2";
 
 const MyCollection = () => {
   const { user } = useContext(AuthContext);
@@ -24,8 +24,7 @@ const MyCollection = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        const userMovies = data.filter((movie) => movie.addedBy === user.email);
-        setMovies(userMovies);
+        setMovies(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -35,11 +34,11 @@ const MyCollection = () => {
       });
   }, [user]);
 
-  // ✅ SweetAlert2 Delete Handler
+  // SweetAlert2 Delete Handler
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't Delete from my collection!",
+      text: "You won't delete this movie from your collection!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -77,14 +76,14 @@ const MyCollection = () => {
 
   if (loading) {
     return (
-      <div className={`text-center mt-10 text-xl`}>
+      <div className="text-center mt-10">
         <Loading />
       </div>
     );
   }
 
   return (
-    <div className={`max-w-5xl mx-auto mt-10`}>
+    <div className="max-w-5xl mx-auto mt-10">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <h2
         className={`text-4xl text-center mt-2 font-extrabold mb-8 ${
@@ -124,12 +123,15 @@ const MyCollection = () => {
               <p>Genre: {movie.genre}</p>
 
               <div className="flex gap-2 mt-3">
+                {/* Edit button navigates to update component */}
                 <button
                   onClick={() => navigate(`/movies/update/${movie._id}`)}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                   Edit
                 </button>
+
+                {/* Delete button triggers SweetAlert2 */}
                 <button
                   onClick={() => handleDelete(movie._id)}
                   className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
