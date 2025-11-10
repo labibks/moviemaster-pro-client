@@ -1,11 +1,43 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import { AuthContext } from "../context/AuthContext"; // তোমার AuthContext import করো
+import { AuthContext } from "../context/AuthContext";
+import { signOut, updateProfile } from "firebase/auth";
+import { auth } from "../firebase/firebase.config"; // 🔥 তোমার Firebase config import করো
+import { useNavigate } from "react-router";
 
 const Profile = () => {
   const { theme } = useContext(ThemeContext);
-  const { user } = useContext(AuthContext); // logged-in user info
-  // user = { displayName, email, photoURL }
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  // ✅ Logout Handler
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        alert("You have been logged out successfully!");
+        navigate("/login"); // লগইন পেজে পাঠানো
+      })
+      .catch((error) => {
+        console.error("Logout Error:", error.message);
+      });
+  };
+
+  // ✅ Edit Profile Handler (Demo)
+  const handleEditProfile = () => {
+    const newName = prompt("Enter your new display name:", user.displayName);
+    if (newName && newName.trim() !== "") {
+      updateProfile(auth.currentUser, {
+        displayName: newName,
+      })
+        .then(() => {
+          alert("Profile updated successfully!");
+          window.location.reload(); // refresh to see changes
+        })
+        .catch((error) => {
+          console.error("Profile update failed:", error.message);
+        });
+    }
+  };
 
   return (
     <div
@@ -59,12 +91,18 @@ const Profile = () => {
           </ul>
         </div>
 
-        {/* Edit / Logout Buttons */}
+        {/* Buttons */}
         <div className="mt-6 flex justify-center gap-4">
-          <button className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          <button
+            onClick={handleEditProfile}
+            className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
             Edit Profile
           </button>
-          <button className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+          <button
+            onClick={handleLogout}
+            className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+          >
             Logout
           </button>
         </div>
