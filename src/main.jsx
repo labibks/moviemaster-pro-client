@@ -16,6 +16,8 @@ import Register from "./Pages/Register.jsx";
 import WatchList from './Pages/WatchList.jsx'
 import Profile from "./Pages/Profile.jsx";
 import ForgotPassword from './Pages/ForgotPassword .jsx'
+import NotFound from "./Pages/NotFound.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 // dummy logged-in user (email or null)
 const user = { email: "user@example.com" }; // logged-in
@@ -85,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: '/forgot',
         Component: ForgotPassword
+      },
+      {
+        path: '*',
+        Component: NotFound
       }
     ],
   },
@@ -92,8 +98,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ErrorBoundary>
   </StrictMode>
 );

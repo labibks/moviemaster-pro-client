@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router";
 import Loading from "../components/Loading";
+import Swal from "sweetalert2"; // ✅ SweetAlert2 import
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -92,6 +93,32 @@ const MovieDetails = () => {
       .catch(() => toast.error("Failed to add to Watchlist!"));
   };
 
+  // ✅ Delete Handler for owner
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This movie will be deleted permanently!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`https://moviemaster-pro-server.vercel.app/movies/${movie._id}`, {
+          method: "DELETE",
+        })
+          .then(() => {
+            toast.success("Movie deleted successfully!");
+            navigate("/mycollection");
+          })
+          .catch(() => toast.error("Failed to delete movie!"));
+      }
+    });
+  };
+
+  const isOwner = user?.email === movie.addedBy;
+
   return (
     <div
       className={`max-w-3xl mx-auto mt-10 p-6 rounded-lg transition-colors duration-300 ${
@@ -108,9 +135,19 @@ const MovieDetails = () => {
       />
       <h2 className="text-3xl font-bold mb-3">{movie.title}</h2>
       <p className="text-lg mb-2">Genre: {movie.genre}</p>
-      <p className="text-lg mb-5">Rating: {movie.rating}</p>
+      <p className="text-lg mb-2">Rating: {movie.rating}</p>
+      <p className="text-lg mb-2">Year: {movie.releaseYear}</p>
+      {movie.plotSummary && (
+        <p
+          className={`mt-5 transition-colors duration-300 ${
+            theme === "dark" ? "text-gray-300" : "text-gray-700"
+          }`}
+        >
+          {movie.plotSummary}
+        </p>
+      )}
 
-      <div className="flex gap-3 flex-wrap">
+      <div className="flex gap-3 flex-wrap mt-5">
         <button
           onClick={handleAddToCollection}
           className={`px-4 py-2 rounded transition ${
@@ -135,7 +172,8 @@ const MovieDetails = () => {
           </button>
         )}
 
-        {user && user.email === movie.addedBy && (
+        {/* ✅ Edit/Delete buttons only visible to owner */}
+        {isOwner && (
           <>
             <button
               onClick={() => navigate(`/movies/update/${movie._id}`)}
@@ -148,9 +186,7 @@ const MovieDetails = () => {
               Edit
             </button>
             <button
-              onClick={() =>
-                toast.info("Delete option only available in My Collection")
-              }
+              onClick={handleDelete}
               className={`px-4 py-2 rounded transition ${
                 theme === "dark"
                   ? "bg-red-700 text-white hover:bg-red-600"
@@ -162,16 +198,6 @@ const MovieDetails = () => {
           </>
         )}
       </div>
-
-      {movie.plotSummary && (
-        <p
-          className={`mt-5 transition-colors duration-300 ${
-            theme === "dark" ? "text-gray-300" : "text-gray-700"
-          }`}
-        >
-          {movie.plotSummary}
-        </p>
-      )}
     </div>
   );
 };
