@@ -9,12 +9,11 @@ const NotFound = () => {
   const handleSpeak = () => {
     const message = "💣 বম বল, খ্যাংকির পোলা, উইড়া যা মাঙ্গারের পোল 💥";
     const utterance = new SpeechSynthesisUtterance(message);
-    utterance.lang = "bn-BD"; // Bangla voice
-    utterance.pitch = 1.4; // মজার টোন
-    utterance.rate = 0.9; // একটু ধীরে বলবে
-    utterance.volume = 1; // পূর্ণ ভলিউম
+    utterance.lang = "bn-BD";
+    utterance.pitch = 1.4;
+    utterance.rate = 0.9;
+    utterance.volume = 1;
 
-    // 👉 ভয়েসগুলো লোড হওয়ার পর মজার পুরুষ কণ্ঠ সিলেক্ট করা
     const voices = window.speechSynthesis.getVoices();
     const banglaVoice =
       voices.find((v) => v.lang === "bn-BD" && v.name.includes("Male")) ||
@@ -25,38 +24,44 @@ const NotFound = () => {
       utterance.voice = banglaVoice;
     }
 
-    // কিছু delay দিয়ে বলবে
     setTimeout(() => window.speechSynthesis.speak(utterance), 200);
   };
 
   return (
     <div
-      className={`flex flex-col justify-center items-center h-screen text-center ${
+      className={`flex flex-col justify-center items-center h-screen text-center p-4 overflow-hidden ${
         theme === "dark"
           ? "bg-gray-900 text-white"
           : "bg-gray-100 text-gray-900"
       }`}
     >
-      <h1 className="text-6xl font-bold mb-4">404</h1>
-      <h2 className="text-2xl font-semibold mb-2">Page Not Found</h2>
-      <p className="mb-6 text-lg font-semibold text-red-500">
-        💣 বম বল, খ্যাংকির পোলা, উইড়া যা মাঙ্গারের পোল 💥
+      {/* Floating 404 text */}
+      <h1 className="text-[10rem] font-extrabold mb-4 animate-bounce text-red-600 select-none">
+        404
+      </h1>
+
+      {/* Page not found message */}
+      <h2 className="text-3xl font-semibold mb-4 animate-pulse">
+        Page Not Found
+      </h2>
+
+      <p className="mb-6 text-lg animate-fadeIn">
+        The page you’re looking for doesn’t exist. 😢
       </p>
 
-      <button
-        onClick={handleSpeak}
-        className="flex items-center gap-2 bg-green-500 text-white px-5 py-2 rounded hover:bg-green-600 transition mb-4"
-      >
-        <Volume2 size={20} />
-        শুনে নাও 🎧
-      </button>
-
+     
+      {/* Go home button */}
       <Link
         to="/"
-        className="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 transition"
+        className="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 transition shadow-lg animate-pulse"
       >
         Go Home
       </Link>
+
+      {/* Extra floating stars for fun */}
+      <div className="absolute top-10 left-5 w-2 h-2 bg-yellow-400 rounded-full animate-spin-slow"></div>
+      <div className="absolute top-20 right-10 w-3 h-3 bg-yellow-300 rounded-full animate-spin-slow"></div>
+      <div className="absolute bottom-20 left-20 w-2 h-2 bg-yellow-200 rounded-full animate-spin-slow"></div>
     </div>
   );
 };
