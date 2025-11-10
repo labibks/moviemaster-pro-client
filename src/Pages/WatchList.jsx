@@ -82,7 +82,9 @@ const WatchList = () => {
       }`}
     >
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
-      <h2 className="text-3xl text-center mt-2 font-bold mb-6">My Watchlist</h2>
+      <h2 className="text-4xl text-center mt-2 font-extrabold mb-6">
+        My <span className="text-orange-600">Watchlist</span>
+      </h2>
 
       {movies.length === 0 ? (
         <p className="text-center text-gray-500">Your watchlist is empty.</p>
