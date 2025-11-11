@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import { ThemeContext } from "../context/ThemeContext"; // Theme context import
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UpdateMovie = ({ loggedInUserEmail }) => {
   const { theme } = useContext(ThemeContext); // theme
@@ -12,7 +14,10 @@ const UpdateMovie = ({ loggedInUserEmail }) => {
     fetch(`https://moviemaster-pro-server.vercel.app/movies/${id}`)
       .then((res) => res.json())
       .then((data) => setMovieData(data))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to fetch movie details!");
+      });
   }, [id]);
 
   if (!movieData)
@@ -40,10 +45,13 @@ const UpdateMovie = ({ loggedInUserEmail }) => {
       body: JSON.stringify(movieData),
     })
       .then(() => {
-        alert("Movie updated successfully! ✅");
-        navigate("/mycollection");
+        toast.success("Movie updated successfully! ✅");
+        setTimeout(() => navigate("/mycollection"), 1500);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to update movie!");
+      });
   };
 
   return (
@@ -54,6 +62,7 @@ const UpdateMovie = ({ loggedInUserEmail }) => {
           : "bg-white text-gray-900"
       }`}
     >
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <h2 className="text-3xl font-bold mb-6 text-center">Update Movie</h2>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         {Object.keys(movieData).map((key) => {

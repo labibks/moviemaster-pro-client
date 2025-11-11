@@ -24,7 +24,7 @@ const AddMovie = () => {
       genre,
       rating,
       posterUrl,
-      releaseYear, // ✅ include Release Year
+      releaseYear, 
       addedBy: user.email,
     };
 
@@ -40,7 +40,7 @@ const AddMovie = () => {
         setGenre("");
         setRating("");
         setPosterUrl("");
-        setReleaseYear(""); // reset Release Year
+        setReleaseYear(""); 
       })
       .catch(() => toast.error("Failed to add movie!"));
   };
@@ -48,7 +48,9 @@ const AddMovie = () => {
   return (
     <div className="max-w-md mx-auto mt-10">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
-      <h2 className="text-2xl font-bold mb-5">Add a New Movie</h2>
+      <h2 className="text-4xl font-extrabold text-center mb-8">
+        <span className="text-orange-600">Add</span> a <span className="text-orange-600">New</span> Movie
+      </h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="text"

@@ -17,6 +17,7 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const profileRef = useRef(null);
@@ -38,6 +39,25 @@ const Navbar = () => {
     return () => window.removeEventListener("click", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (query.trim().length > 1) {
+        fetch(
+          `https://moviemaster-pro-server.vercel.app/movies?search=${encodeURIComponent(
+            query.trim()
+          )}`
+        )
+          .then((res) => res.json())
+          .then((data) => setSearchResults(data))
+          .catch(() => setSearchResults([]));
+      } else {
+        setSearchResults([]);
+      }
+    }, 500);
+    return () => clearTimeout(delay);
+  }, [query]);
+
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -49,11 +69,13 @@ const Navbar = () => {
     }
   };
 
+ 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (query.trim().length > 0) {
       navigate(`/movies?search=${encodeURIComponent(query.trim())}`);
       setMobileOpen(false);
+      setSearchResults([]); // hide dropdown
     } else {
       navigate("/movies");
       setMobileOpen(false);
@@ -139,7 +161,7 @@ const Navbar = () => {
           {/* Search bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className={`ml-6 flex items-center rounded overflow-hidden ${
+            className={`ml-6 flex items-center rounded overflow-hidden relative ${
               theme === "dark" ? "bg-gray-700" : "bg-gray-100"
             }`}
           >
@@ -157,6 +179,31 @@ const Navbar = () => {
                 className={theme === "dark" ? "text-white" : "text-gray-700"}
               />
             </button>
+
+            {/* 🔍 Dropdown search result */}
+            {searchResults.length > 0 && (
+              <ul
+                className={`absolute top-11 left-0 w-full max-h-64 overflow-y-auto rounded-lg shadow-lg z-50 ${
+                  theme === "dark"
+                    ? "bg-gray-800 text-white"
+                    : "bg-white text-gray-800"
+                }`}
+              >
+                {searchResults.map((movie) => (
+                  <li
+                    key={movie._id}
+                    onClick={() => {
+                      navigate(`/movies/${movie._id}`);
+                      setQuery("");
+                      setSearchResults([]);
+                    }}
+                    className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                  >
+                    🎥 {movie.title}
+                  </li>
+                ))}
+              </ul>
+            )}
           </form>
         </div>
 
