@@ -24,7 +24,6 @@ const Home = () => {
     .slice(0, 6);
 
   const genres = [
-    "All",
     "Action",
     "Drama",
     "Comedy",
@@ -170,7 +169,10 @@ const Home = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center text-gray-500 col-span-full">
+              <p className=" text-4xl font-extrabold text-red-600 text-center text-gray-500 py-6 col-span-full">
+                <span >opps !!</span>
+                <br></br>
+
                 No movies found in this genre.
               </p>
             )}
