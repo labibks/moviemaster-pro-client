@@ -12,7 +12,7 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    document.documentElement.className = theme; // Tailwind dark/light
+    document.documentElement.className = theme; 
     localStorage.setItem("app-theme", theme);
   }, [theme]);
 

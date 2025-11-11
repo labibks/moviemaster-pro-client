@@ -4,7 +4,7 @@ import { ThemeContext } from "../context/ThemeContext.jsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router";
-import { Eye, EyeOff } from "lucide-react"; // for icons
+import { Eye, EyeOff } from "lucide-react"; 
 
 const Login = () => {
   const { signInUser, loginGoogle } = useContext(AuthContext);
@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true);
     try {
       await signInUser(email, password);
-      toast.success("Login successful! ✅");
+      toast.success("Login successful! ");
       navigate("/");
     } catch (err) {
       toast.error(`Login failed: ${err.message}`);
@@ -33,7 +33,7 @@ const Login = () => {
     setLoading(true);
     try {
       await loginGoogle();
-      toast.success("Login with Google successful! ✅");
+      toast.success("Login with Google successful! ");
       navigate("/");
     } catch (err) {
       toast.error(`Google login failed: ${err.message}`);

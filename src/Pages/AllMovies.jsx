@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
-import { ThemeContext } from "../context/ThemeContext"; // Theme context import
+import { ThemeContext } from "../context/ThemeContext"; 
 import Loading from "../components/Loading";
 
 const AllMovies = () => {
@@ -9,7 +9,7 @@ const AllMovies = () => {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("All");
-  const [ratingRange, setRatingRange] = useState({ min: 0, max: 10 }); // rating filter state
+  const [ratingRange, setRatingRange] = useState({ min: 0, max: 10 }); 
   const [loading, setLoading] = useState(true);
 
   const { users } = useContext(AuthContext);

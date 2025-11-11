@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ThemeContext } from "../context/ThemeContext"; // Theme context import
+import { ThemeContext } from "../context/ThemeContext"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UpdateMovie = ({ loggedInUserEmail }) => {
-  const { theme } = useContext(ThemeContext); // theme
+  const { theme } = useContext(ThemeContext); 
   const { id } = useParams();
   const navigate = useNavigate();
   const [movieData, setMovieData] = useState(null);
@@ -45,7 +45,7 @@ const UpdateMovie = ({ loggedInUserEmail }) => {
       body: JSON.stringify(movieData),
     })
       .then(() => {
-        toast.success("Movie updated successfully! ✅");
+        toast.success("Movie updated successfully! ");
         setTimeout(() => navigate("/mycollection"), 1500);
       })
       .catch((err) => {

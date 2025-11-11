@@ -6,26 +6,7 @@ import { Volume2 } from "lucide-react";
 const NotFound = () => {
   const { theme } = useContext(ThemeContext);
 
-  const handleSpeak = () => {
-    const message = "💣 বম বল, খ্যাংকির পোলা, উইড়া যা মাঙ্গারের পোল 💥";
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.lang = "bn-BD";
-    utterance.pitch = 1.4;
-    utterance.rate = 0.9;
-    utterance.volume = 1;
-
-    const voices = window.speechSynthesis.getVoices();
-    const banglaVoice =
-      voices.find((v) => v.lang === "bn-BD" && v.name.includes("Male")) ||
-      voices.find((v) => v.lang.includes("bn")) ||
-      voices.find((v) => v.lang.includes("en"));
-
-    if (banglaVoice) {
-      utterance.voice = banglaVoice;
-    }
-
-    setTimeout(() => window.speechSynthesis.speak(utterance), 200);
-  };
+  
 
   return (
     <div

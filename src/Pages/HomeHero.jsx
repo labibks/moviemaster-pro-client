@@ -4,13 +4,12 @@ import Loading from "../components/Loading";
 const HomeHero = ({ featuredMovies }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // movies আছে কিনা check করে interval setup করবো
   useEffect(() => {
-    if (!featuredMovies || featuredMovies.length === 0) return; // কোনো movies নেই
+    if (!featuredMovies || featuredMovies.length === 0) return; 
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % featuredMovies.length);
-    }, 2000); // 1 second per slide
+    }, 2000); 
 
     return () => clearInterval(interval);
   }, [featuredMovies]);

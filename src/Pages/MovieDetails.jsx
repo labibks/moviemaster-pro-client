@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router";
 import Loading from "../components/Loading";
-import Swal from "sweetalert2"; // ✅ SweetAlert2 import
+import Swal from "sweetalert2"; 
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -93,7 +93,6 @@ const MovieDetails = () => {
       .catch(() => toast.error("Failed to add to Watchlist!"));
   };
 
-  // ✅ Delete Handler for owner
   const handleDelete = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -172,7 +171,6 @@ const MovieDetails = () => {
           </button>
         )}
 
-        {/* ✅ Edit/Delete buttons only visible to owner */}
         {isOwner && (
           <>
             <button

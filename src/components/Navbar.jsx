@@ -75,7 +75,7 @@ const Navbar = () => {
     if (query.trim().length > 0) {
       navigate(`/movies?search=${encodeURIComponent(query.trim())}`);
       setMobileOpen(false);
-      setSearchResults([]); // hide dropdown
+      setSearchResults([]); 
     } else {
       navigate("/movies");
       setMobileOpen(false);
@@ -180,7 +180,7 @@ const Navbar = () => {
               />
             </button>
 
-            {/* 🔍 Dropdown search result */}
+            {/*  Dropdown search result */}
             {searchResults.length > 0 && (
               <ul
                 className={`absolute top-11 left-0 w-full max-h-64 overflow-y-auto rounded-lg shadow-lg z-50 ${

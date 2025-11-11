@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { ThemeContext } from "../context/ThemeContext"; // ThemeContext import
+import { ThemeContext } from "../context/ThemeContext"; 
 import { toast, ToastContainer } from "react-toastify";
 import Loading from "../components/Loading";
 import "react-toastify/dist/ReactToastify.css";
 
 const WatchList = () => {
   const { user } = useContext(AuthContext);
-  const { theme } = useContext(ThemeContext); // theme
+  const { theme } = useContext(ThemeContext); 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 

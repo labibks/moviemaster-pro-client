@@ -4,14 +4,13 @@ import { AuthContext } from "../context/AuthContext";
 import { signOut, updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
 import { useNavigate } from "react-router";
-import Swal from "sweetalert2"; // ✅ SweetAlert2 import
+import Swal from "sweetalert2"; 
 
 const Profile = () => {
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // ✅ Logout Handler with SweetAlert2
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -39,7 +38,6 @@ const Profile = () => {
     });
   };
 
-  // ✅ Edit Profile Handler
   const handleEditProfile = () => {
     const newName = prompt("Enter your new display name:", user.displayName);
     if (newName && newName.trim() !== "") {

@@ -33,7 +33,7 @@ const Home = () => {
     "Animation",
   ];
 
-  // ✅ Filter করা movie list
+  // Filter করা movie list
   const filteredMovies =
     selectedGenre === "All"
       ? []
@@ -95,7 +95,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ✅ Recently Added Movies */}
+      {/*  Recently Added Movies */}
       <section className="recently-added py-12">
         <h2 className="text-4xl font-extrabold text-center mb-6">
           Re<span className="text-orange-600">cen</span>tly Added
@@ -122,7 +122,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ✅ Genre Section (Dynamic filter নিচে show হবে) */}
+      {/*  Genre Section (Dynamic filter নিচে show হবে) */}
       <section className="genres py-12">
         <h2 className="text-4xl font-extrabold text-center mb-6">
           Browse <span className="text-orange-600">by</span> Genre
@@ -146,7 +146,6 @@ const Home = () => {
           ))}
         </div>
 
-        {/* শুধুমাত্র যখন কোনো genre select করা হবে তখন movie দেখাবে */}
         {selectedGenre !== "All" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-5">
             {filteredMovies.length > 0 ? (

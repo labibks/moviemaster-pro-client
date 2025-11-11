@@ -19,9 +19,7 @@ import ForgotPassword from './Pages/ForgotPassword .jsx'
 import NotFound from "./Pages/NotFound.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
-// dummy logged-in user (email or null)
 const user = { email: "user@example.com" }; // logged-in
-// const user = null; // not logged-in
 
 const router = createBrowserRouter([
   {

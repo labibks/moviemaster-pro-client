@@ -4,7 +4,7 @@ import { ThemeContext } from "../context/ThemeContext.jsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router";
-import { Eye, EyeOff } from "lucide-react"; // 👁️ password toggle icons
+import { Eye, EyeOff } from "lucide-react"; 
 
 const Register = () => {
   const { register, loginGoogle } = useContext(AuthContext);
@@ -14,7 +14,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 👁️ toggle state
+  const [showPassword, setShowPassword] = useState(false); 
 
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const Register = () => {
     setLoading(true);
     try {
       await register(email, password);
-      toast.success("User registered successfully! ✅");
+      toast.success("User registered successfully! ");
       navigate("/login");
     } catch (err) {
       toast.error(`Registration failed: ${err.message}`);
@@ -48,7 +48,7 @@ const Register = () => {
     setLoading(true);
     try {
       await loginGoogle();
-      toast.success("Google login successful! ✅");
+      toast.success("Google login successful! ");
       navigate("/");
     } catch (err) {
       toast.error(`Google login failed: ${err.message}`);
